@@ -1,0 +1,33 @@
+---
+# tasks file for role_lx_setup_user
+
+
+- name: add default user
+  user:
+    name: odin
+    shell: /bin/bash
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
+
+- name: copy .vimrc
+  copy: 
+    src: files/vimrc 
+    dest: /home/odin/.bashrc
+    owner: odin
+    group: odin
+
+- name: copy .bashrc
+  copy:
+    src: files/bashrc
+    dest: /home/odin/.bashrc
+    owner: odin
+    group: odin
+
+- name: copy .profile
+  copy:
+    src: files/profile
+    dest: /home/odin/.profile
+    owner: odin
+    group: odin
+

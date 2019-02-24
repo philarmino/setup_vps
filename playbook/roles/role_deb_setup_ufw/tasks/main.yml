@@ -1,0 +1,41 @@
+---
+# tasks file for role_deb_setup_ufw
+
+- name: install ufw
+  apt:
+    name: ufw
+    state: present
+
+- ufw:
+    rule: allow
+    name: OpenSSH
+
+- ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: enable UFW and set default policy to deny
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+    logging: yes
+
+- name: show ufw status
+  shell: ufw status verbose
+  register: result 
+
+- debug: 
+    var: result.stdout_lines    
+
+- name: remove logging from syslog
+  lineinfile:
+    path: /etc/rsyslog.d/20-ufw.conf
+    regexp: '^:msg'
+    line: ':msg,contains,"[UFW " /var/log/ufw.log'
+
+- name: restart rsyslog 
+  systemd:
+    name: rsyslog
+    state: restarted
