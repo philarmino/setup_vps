@@ -31,3 +31,12 @@
     owner: odin
     group: odin
 
+- name: ensure sudo is installed
+  package:
+    name: sudo
+    state: present
+
+- name: add user to suders
+  lineinfile:
+    path: /etc/sudoers
+    line: "odin ALL = PASSWD: ALL"
