@@ -1,1 +1,175 @@
+---
+# 
 
+- name: Ensure cron is installed
+  package:
+    name: cron
+    state: present
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    
+- name: Ensure ntp is installed
+  package:
+    name: ntp
+    state: present
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+    
+- name: Enable service ntp
+  service:
+    name: ntp
+    enabled: "yes"
+    state: "started"
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+
+- name: Ensure nis is removed
+  package:
+    name: nis
+    state: absent
+    
+- name: Ensure telnetd is removed
+  package:
+    name: telnetd
+    state: absent
+    
+- name: Ensure ntpdate is removed
+  package:
+    name: ntpdate
+    state: absent
+    
+- name: Ensure telnetd-ssl is removed
+  package:
+    name: telnetd-ssl
+    state: absent
+
+- name: Ensure inetutils-telnetd is removed
+  package:
+    name: inetutils-telnetd
+    state: absent
+    
+- name: Enable service rsyslog
+  service:
+    name: rsyslog
+    enabled: "yes"
+    state: "started"
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")    
+ 
+- name: Ensure rsyslog is installed
+  package:
+    name: rsyslog
+    state: present
+    
+- name: Ensure auditd is installed
+  package:
+    name: auditd
+    state: present   
+    
+- name: Enable service auditd
+  service:
+    name: auditd
+    enabled: "yes"
+    state: "started"
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")  
+
+- name: Ensure permission 0640 on /etc/shadow
+  file:
+    path: /etc/shadow
+    mode: 0640
+
+- name: Ensure owner 0 on /etc/shadow
+  file:
+    path: /etc/shadow
+    owner: 0
+
+- name: Ensure owner 0 on /etc/group
+  file:
+    path: /etc/group
+    owner: 0
+
+- name: Ensure permission 0644 on /etc/group
+  file:
+    path: /etc/group
+    mode: 0644
+    
+- name: Test for existence /etc/gshadow
+  stat:
+    path: /etc/gshadow
+  register: gshadow_file_exists
+
+- name: Ensure group owner 42 on /etc/gshadow
+  file:
+    path: /etc/gshadow
+    group: 42
+  when: gshadow_file_exists.stat.exists and True
+  
+- name: Ensure group owner 0 on /etc/passwd
+  file:
+    path: /etc/passwd
+    group: 0
+    
+- name: Ensure group owner 42 on /etc/shadow
+  file:
+    path: /etc/shadow
+    group: 42
+    
+- name: Ensure owner 0 on /etc/gshadow
+  file:
+    path: /etc/gshadow
+    owner: 0
+  when: gshadow_file_exists.stat.exists and True    
+
+- name: Ensure group owner 0 on /etc/group
+  file:
+    path: /etc/group
+    group: 0
+    
+- name: Ensure permission 0640 on /etc/gshadow
+  file:
+    path: /etc/gshadow
+    mode: 0640
+  when: gshadow_file_exists.stat.exists and True
+  
+- name: Ensure owner 0 on /etc/passwd
+  file:
+    path: /etc/passwd
+    owner: 0
+    
+- name: Ensure permission 0644 on /etc/passwd
+  file:
+    path: /etc/passwd
+    mode: 0644
+    
+- name: Ensure sysctl fs.protected_symlinks is set to 1
+  sysctl:
+    name: fs.protected_symlinks
+    value: 1
+    state: present
+    reload: yes
+    
+- name: Ensure sysctl fs.protected_hardlinks is set to 1
+  sysctl:
+    name: fs.protected_hardlinks
+    value: 1
+    state: present
+    reload: yes
+    
+- name: Ensure sysctl fs.suid_dumpable is set to 0
+  sysctl:
+    name: fs.suid_dumpable
+    value: 0
+    state: present
+    reload: yes
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
+
+- name: Ensure sysctl kernel.randomize_va_space is set to 2
+  sysctl:
+    name: kernel.randomize_va_space
+    value: 2
+    state: present
+    reload: yes
+  when:  # Bare-metal/VM task, not applicable for containers
+    - (ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker")
