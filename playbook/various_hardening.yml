@@ -1,5 +1,6 @@
 ---
-# 
+# Guide to the Secure Configuration of Debian 8
+# https://static.open-scap.org/ssg-guides/ssg-debian8-guide-anssi_np_nt28_high.html
 
 - name: Ensure cron is installed
   package:
