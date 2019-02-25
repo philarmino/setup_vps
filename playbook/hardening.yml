@@ -1,5 +1,6 @@
 ---
 - hosts: all
   roles:
-#    - roles/role_deb_setup_ufw
+    - roles/role_deb_setup_ufw
     - roles/role_lx_setup_user
+    - roles/role_lx_various_hardening
