@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - roles/role_lx_install_elk

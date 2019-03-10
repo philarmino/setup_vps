@@ -1,0 +1,21 @@
+---
+# tasks file for role_lx_install_elk
+
+- name: Install OpenJDK
+  apt: name=openjdk-8-jdk state=present
+
+- name: Install Elasticsearch
+  include: elasticsearch.yml
+
+- name: Install Kibana
+  include: kibana.yml
+
+#- name: Install Nginx
+#  include: nginx.yml
+#
+#- name: Install Logstash
+#  include: logstash.yml
+
+#- name: Load Kibana dashboards
+#  include: dashboard.yml 
+

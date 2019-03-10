@@ -1,0 +1,25 @@
+---
+- name: Install apt-transport-https
+  apt: 
+    name: apt-transport-https 
+    state: present
+
+- name: Add an Apt signing key for elastic
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    id: D88E42B4
+    state: present
+
+- name: Add Repo for artifacts.elastic.co
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/{{ elasticsearch.version }}/apt stable main
+    state: present
+
+- name: Install elasticsearch  package
+  apt:
+    name: elasticsearch
+    state: present
+
+- name: Restrict to localhost
+  lineinfile: 'dest=/etc/elasticsearch/elasticsearch.yml regexp=network.host line="network.host: localhost"'
+  notify: Restart elasticsearch

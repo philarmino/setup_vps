@@ -1,0 +1,26 @@
+---
+# defaults file for role_lx_install_elk
+
+elk_kibana:
+  version: 4.0.2-linux-x64
+  path: /opt/kibana
+  port: 5601
+  user: kibana # optional; if unset, kibana does not require authentication
+  password: kibana # optional; if unset, kibana does not require authentication
+  allowed_addresses:
+    - 127.0.0.1
+
+elasticsearch:
+  version: 6.x
+
+kibana:
+  version: 4.4
+
+nginx:
+  port: 80
+  error_log: /var/log/nginx/error.log
+  worker_connections: 1024
+  keepalive_timeout: 65
+
+logstash:
+  version: 2.2    
